@@ -1,0 +1,97 @@
+# Значения переменных
+cloud_id  = "ваш_id"
+folder_id = "ваш_id"
+
+# Пароли
+zabbix_db_password   = "ваш_пароль"
+replication_password = "ваш_пароль"
+monitor_password     = "ваш_пароль"
+
+vms = {
+  bastion = {
+    name               = "bastion-host"
+    cores              = 2
+    memory             = 2
+    disk_size          = 10
+    image_family       = "ubuntu-2404-lts"
+    subnet_id          = "fortress_a"
+    assign_public_ip   = true
+    nat_ip_address     = ""
+    user_data_script   = "./templates/cloud-init-bastion.tpl"
+    availability_zone  = "ru-central1-a"
+    private_ip         = "10.0.1.5"
+    security_group_ids = ["LAN", "bastion_sg"]
+    serial_port_enable = 1
+  }
+
+  zabbix = {
+    name               = "zabbix-server"
+    cores              = 2
+    memory             = 2
+    disk_size          = 10
+    image_family       = "ubuntu-2404-lts"
+    subnet_id          = "fortress_a"
+    assign_public_ip   = true
+    nat_ip_address     = ""
+    availability_zone  = "ru-central1-a"
+    private_ip         = "10.0.1.10"
+    security_group_ids = ["LAN", "zabbix_sg"]
+    user_data_script   = "./templates/cloud-init-zabbix.tpl"
+  }
+
+  db_primary = {
+    name               = "db-primary"
+    cores              = 2
+    memory             = 2
+    disk_size          = 10
+    image_family       = "ubuntu-2404-lts"
+    subnet_id          = "fortress_a"
+    assign_public_ip   = false
+    availability_zone  = "ru-central1-a"
+    private_ip         = "10.0.1.15"
+    security_group_ids = ["LAN", "db_server_sg"]
+    user_data_script   = "./templates/cloud-init-db-master.tpl"
+  }
+
+  db_secondary = {
+    name               = "db-secondary"
+    cores              = 2
+    memory             = 2
+    disk_size          = 10
+    image_family       = "ubuntu-2404-lts"
+    subnet_id          = "fortress_b"
+    assign_public_ip   = false
+    availability_zone  = "ru-central1-b"
+    private_ip         = "10.0.2.15"
+    security_group_ids = ["LAN", "db_server_sg"]
+    user_data_script   = "./templates/cloud-init-db-slave.tpl"
+  }
+
+  web_1 = {
+    name               = "web-1"
+    cores              = 2
+    memory             = 2
+    disk_size          = 10
+    image_family       = "ubuntu-2404-lts"
+    subnet_id          = "fortress_a"
+    assign_public_ip   = false
+    availability_zone  = "ru-central1-a"
+    private_ip         = "10.0.1.20"
+    security_group_ids = ["LAN", "web_sg"]
+    user_data_script   = "./templates/cloud-init-web1.tpl"
+  }
+
+  web_2 = {
+    name               = "web-2"
+    cores              = 2
+    memory             = 2
+    disk_size          = 10
+    image_family       = "ubuntu-2404-lts"
+    subnet_id          = "fortress_b"
+    assign_public_ip   = false
+    availability_zone  = "ru-central1-b"
+    private_ip         = "10.0.2.20"
+    security_group_ids = ["LAN", "web_sg"]
+    user_data_script   = "./templates/cloud-init-web2.tpl"
+  }
+}

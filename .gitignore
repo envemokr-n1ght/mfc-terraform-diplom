@@ -1,0 +1,37 @@
+# .gitignore для Terraform проекта
+
+# Ключ сервисного аккаунта
+.authorized_key.json
+*.json
+
+# Исполняемые файлы
+*.exe
+
+# Директория с провайдерами
+.terraform/
+.terraform.lock.hcl
+
+# Файлы состояния
+*.tfstate
+*.tfstate.*
+terraform.tfstate
+terraform.tfstate.backup
+
+# Файлы переменных с секретами
+*.tfvars
+*.tfvars.json
+terraform.tfvars
+
+# Crash-логи
+crash.log
+crash.*.log
+
+# Переопределения
+override.tf
+override.tf.json
+*_override.tf
+*_override.tf.json
+
+# CLI конфигурации
+.terraformrc
+terraform.rc
