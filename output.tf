@@ -35,7 +35,7 @@ output "nlb_public_balancer" {
 
 output "ssh_connection_command" {
   value       = "ssh -J ubuntu@${yandex_compute_instance.others["bastion"].network_interface[0].nat_ip_address} ubuntu@<private_ip>"
-  description = "Использовать 'ssh -J ubuntu@<bastion-ip> ubuntu@<vm-ip>' для подключения с помощью bastion"
+  description = "Команда для подключения к ВМ с помощью bastion"
 }
 
 # ============================================
