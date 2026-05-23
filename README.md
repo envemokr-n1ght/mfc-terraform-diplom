@@ -27,13 +27,13 @@
 ├── .gitignore # Исключаемые файлы
 ├── README.md # Этот файл
 └── templates/
-├── cloud-init-bastion.tpl # Cloud-init для Bastion
-├── cloud-init-zabbix.tpl # Cloud-init для Zabbix
-├── cloud-init-web-1.tpl # Cloud-init для web-1
-├── cloud-init-web-2.tpl # Cloud-init для web-2
-├── cloud-init-db-master.tpl # Cloud-init для мастер-БД
-├── cloud-init-db-slave.tpl # Cloud-init для реплики БД
-└── ssh-config.tpl # Шаблон SSH-конфигурации для подключения через Bastion
+  ├── cloud-init-bastion.tpl # Cloud-init для Bastion
+  ├── cloud-init-zabbix.tpl # Cloud-init для Zabbix
+  ├── cloud-init-web-1.tpl # Cloud-init для web-1
+  ├── cloud-init-web-2.tpl # Cloud-init для web-2
+  ├── cloud-init-db-master.tpl # Cloud-init для мастер-БД
+  ├── cloud-init-db-slave.tpl # Cloud-init для реплики БД
+  └── ssh-config.tpl # Шаблон SSH-конфигурации для подключения через Bastion
 ```
 
 ## Требования для развёртывания
