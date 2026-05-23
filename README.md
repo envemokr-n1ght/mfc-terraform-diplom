@@ -17,39 +17,21 @@
 ## Структура репозитория
 .
 ├── main.tf # Основной файл Terraform (ВМ, локальные переменные)
-
 ├── network.tf # Сеть, подсети, security groups, NAT
-
 ├── nlb.tf # Network Load Balancer
-
 ├── providers.tf # Провайдеры и аутентификация
-
 ├── variables.tf # Объявление переменных
-
 ├── outputs.tf # Выходные данные (IP-адреса)
-
 ├── terraform.tfvars.example # Пример файла с переменными (скопировать в .tfvars)
-
 ├── .gitignore # Исключаемые файлы
-
 ├── README.md # Этот файл
-
-├── cloud-init/
-
-│ ├── bastion.tpl # Cloud-init для Bastion
-
-│ ├── zabbix.tpl # Cloud-init для Zabbix
-
-│ ├── web-1.tpl # Cloud-init для web-1
-
-│ ├── web-2.tpl # Cloud-init для web-2
-
-│ ├── db-primary.tpl # Cloud-init для мастер-БД
-
-│ └── db-secondary.tpl # Cloud-init для реплики БД
-
-└── templates/
-
+├── templates/
+│ ├── cloud-init-bastion.tpl # Cloud-init для Bastion
+│ ├── cloud-init-zabbix.tpl # Cloud-init для Zabbix
+│ ├── cloud-init-web-1.tpl # Cloud-init для web-1
+│ ├── cloud-init-web-2.tpl # Cloud-init для web-2
+│ ├── cloud-init-db-master.tpl # Cloud-init для мастер-БД
+│ └── cloud-init-db-slave.tpl # Cloud-init для реплики БД
 └── ssh-config.tpl # Шаблон SSH-конфига для подключения через Bastion
 
 
