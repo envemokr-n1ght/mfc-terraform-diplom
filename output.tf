@@ -37,11 +37,3 @@ output "ssh_connection_command" {
   value       = "ssh -J ubuntu@${yandex_compute_instance.others["bastion"].network_interface[0].nat_ip_address} ubuntu@<private_ip>"
   description = "Команда для подключения к ВМ с помощью bastion"
 }
-
-# ============================================
-# СТАТУСЫ БАЗ ДАННЫХ
-# ============================================
-output "replication_status" {
-  value = "Проверка репликации на db-secondary: ssh -J ubuntu@${yandex_compute_instance.others["bastion"].network_interface[0].nat_ip_address} ubuntu@${yandex_compute_instance.db_secondary["db_secondary"].network_interface[0].ip_address} \"sudo -u postgres psql -c 'SELECT pg_is_in_recovery();'\""
-  description = "Команда для проверки статуса репликации db-secondary"
-}
