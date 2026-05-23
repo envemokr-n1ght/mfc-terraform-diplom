@@ -75,51 +75,58 @@
 ### Подключение к ресурсам
 
 - Через Bastion-хост
+```
 Получить публичный IP Bastion
   terraform output bastion_public_ip
 
 Подключиться к любой внутренней ВМ
   ssh -J ubuntu@<bastion_ip> ubuntu@<private_ip>
-
+```
 - К веб-сайту
+```
   Получить IP балансировщика
   terraform output nlb_public_ip
 
 Открыть в браузере: http://<nlb_ip>
-
+```
 - К Zabbix
+```
 # Получить публичный IP Zabbix
 terraform output zabbix_public_ip
 
 Открыть в браузере: http://<zabbix_ip>/zabbix
 Логин: Admin, пароль: zabbix (или заданный в переменных)
-
+```
 ### Тестирование отказоустойчивости
 
 - Веб-уровень
+```
 Остановить один из веб-серверов
   ssh -J ubuntu@<bastion_ip> ubuntu@10.0.1.20
   sudo systemctl stop nginx
 
 Проверить, что сайт продолжает работать через балансировщик
   curl http://<nlb_ip>
-
+```
 - База данных
+```
 Проверить режим реплики
   ssh -J ubuntu@<bastion_ip> ubuntu@10.0.2.15
   sudo -u postgres psql -c "SELECT pg_is_in_recovery();"  # Должно быть 't'
 
 Проверить синхронную репликацию на мастере
   sudo -u postgres psql -c "SELECT application_name, sync_state FROM pg_stat_replication;"
-
+```
 ### Проверка записи в базе данных
+```
 Подключиться к мастер-БД
   ssh -J ubuntu@<bastion_ip> ubuntu@10.0.1.15
 
 Посмотреть последние 5 сообщений
   sudo -u postgres psql -d app_db -c "SELECT id, message, server_name, created_at FROM feedback ORDER BY id DESC LIMIT 5;"
-
+```
 ### Очистка таблицы с сообщениями
+```
 Подключиться к мастер-БД
 ssh -J ubuntu@<bastion_ip> ubuntu@10.0.1.15
 
@@ -128,7 +135,7 @@ sudo -u postgres psql -d app_db -c "TRUNCATE TABLE feedback;"
 
 Проверить, что таблица пуста
 sudo -u postgres psql -d app_db -c "SELECT COUNT(*) FROM feedback;"
-
+```
 ### Очистка ресурсов
   terraform destroy
 
