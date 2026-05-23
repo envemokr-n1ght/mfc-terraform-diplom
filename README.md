@@ -60,18 +60,18 @@
 - Пароли для баз данных и мониторинга (zabbix_db_password, replication_password, monitor_password)
 
 ### 3. Настройка ключей
-
+```
 - Поместите ключ сервисного аккаунта в папку проекта с именем .authorized_key.json
 - Убедитесь, что SSH-ключ существует в ~/.ssh/id_rsa (или измените путь в коде)
-
+```
 ### 4. Инициализация и запуск
-
+```
   terraform init
   terraform plan
   terraform apply
 
 После успешного применения будут выведены IP-адреса всех ресурсов.
-
+```
 ### Подключение к ресурсам
 
 - Через Bastion-хост
@@ -128,15 +128,16 @@ terraform output zabbix_public_ip
 ### Очистка таблицы с сообщениями
 ```
 Подключиться к мастер-БД
-ssh -J ubuntu@<bastion_ip> ubuntu@10.0.1.15
+  ssh -J ubuntu@<bastion_ip> ubuntu@10.0.1.15
 
 Удалить все записи из таблицы feedback
-sudo -u postgres psql -d app_db -c "TRUNCATE TABLE feedback;"
+  sudo -u postgres psql -d app_db -c "TRUNCATE TABLE feedback;"
 
 Проверить, что таблица пуста
-sudo -u postgres psql -d app_db -c "SELECT COUNT(*) FROM feedback;"
+  sudo -u postgres psql -d app_db -c "SELECT COUNT(*) FROM feedback;"
 ```
 ### Очистка ресурсов
+```
   terraform destroy
-
+```
   
