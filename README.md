@@ -47,31 +47,31 @@
 ## Настройка и развёртывание
 
 ### 1. Клонирование репозитория
-
+```
   git clone https://github.com/envemokr-n1ght/mfc-terraform-diplom.git
   cd mfc-terraform-diplom
-
+```
 ### 2. Настройка переменных
-
+```
   cp terraform.tfvars.example terraform.tfvars
-
+```
 Отредактируйте terraform.tfvars, указав:
 - cloud_id и folder_id из вашего облака Yandex Cloud
 - Пароли для баз данных и мониторинга (zabbix_db_password, replication_password, monitor_password)
 
 ### 3. Настройка ключей
-```
+
 - Поместите ключ сервисного аккаунта в папку проекта с именем .authorized_key.json
 - Убедитесь, что SSH-ключ существует в ~/.ssh/id_rsa (или измените путь в коде)
-```
+
 ### 4. Инициализация и запуск
 ```
   terraform init
   terraform plan
   terraform apply
-
-После успешного применения будут выведены IP-адреса всех ресурсов.
 ```
+После успешного применения будут выведены IP-адреса всех ресурсов.
+
 ### Подключение к ресурсам
 
 - Через Bastion-хост
