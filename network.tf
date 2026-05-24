@@ -52,13 +52,6 @@ resource "yandex_vpc_security_group" "bastion_sg" {
   }
 
   egress {
-    description    = "Allow Zabbix агенту подключаться к Zabbix серверу"
-    protocol       = "TCP"
-    v4_cidr_blocks = ["10.0.1.10/32"] # IP Zabbix-сервера
-    port           = 10051
-  }
-
-  egress {
     description    = "Permit ALL"
     protocol       = "ANY"
     v4_cidr_blocks = ["0.0.0.0/0"]
@@ -130,11 +123,17 @@ resource "yandex_vpc_security_group" "web_sg" {
   }
 
   egress {
-    description    = "Allow all outgoing traffic"
+    description    = "Limited outgoing for updates"
     protocol       = "TCP"
     v4_cidr_blocks = ["0.0.0.0/0"]
-    from_port      = 0
-    to_port        = 65535
+    port           = 443  # Только HTTPS для обновлений
+  }
+
+  egress {
+    description    = "DNS for updates"
+    protocol       = "UDP"
+    v4_cidr_blocks = ["0.0.0.0/0"]
+    port           = 53
   }
 }
 
@@ -168,9 +167,17 @@ resource "yandex_vpc_security_group" "zabbix_sg" {
   }
 
   egress {
-    description    = "Permit ALL"
-    protocol       = "ANY"
+    description    = "Outgoing for updates and notifications"
+    protocol       = "TCP"
     v4_cidr_blocks = ["0.0.0.0/0"]
+    port           = 443
+  }
+
+  egress {
+    description    = "DNS"
+    protocol       = "UDP"
+    v4_cidr_blocks = ["0.0.0.0/0"]
+    port           = 53
   }
 }
 
