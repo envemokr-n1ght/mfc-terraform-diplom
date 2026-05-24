@@ -151,6 +151,13 @@ resource "yandex_vpc_security_group" "zabbix_sg" {
   }
 
   ingress {
+    description    = "Allow SSH from bastion"
+    protocol       = "TCP"
+    v4_cidr_blocks = ["10.0.1.5/32"]
+    port           = 22
+  } 
+
+  ingress {
     description = "Allow Zabbix agents to send data"
     protocol    = "TCP"
     v4_cidr_blocks = [
@@ -186,6 +193,13 @@ resource "yandex_vpc_security_group" "db_server_sg" {
     v4_cidr_blocks = ["10.0.2.15/32"]
     port           = 5432
   }
+
+  ingress {
+    description    = "Allow SSH from bastion"
+    protocol       = "TCP"
+    v4_cidr_blocks = ["10.0.1.5/32"]
+    port           = 22
+  } 
 
   egress {
     description    = "Allow Zabbix agent to connent to Zabbix server"
