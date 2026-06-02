@@ -1,9 +1,9 @@
-#Создаем облачную сеть
+#Создание облачной сети
 resource "yandex_vpc_network" "fortress" {
   name = "fortress-network"
 }
 
-#Создаем подсеть zone A
+#Создание подсети zone A
 resource "yandex_vpc_subnet" "fortress_a" {
   name           = "fortress-a"
   zone           = "ru-central1-a"
@@ -12,7 +12,7 @@ resource "yandex_vpc_subnet" "fortress_a" {
   route_table_id = yandex_vpc_route_table.rt.id
 }
 
-#Создаем подсеть zone B
+#Создание подсети zone B
 resource "yandex_vpc_subnet" "fortress_b" {
   name           = "fortress-b"
   zone           = "ru-central1-b"
@@ -21,13 +21,13 @@ resource "yandex_vpc_subnet" "fortress_b" {
   route_table_id = yandex_vpc_route_table.rt.id
 }
 
-#Создаем NAT для выхода в интернет
+#Создание NAT для выхода в интернет
 resource "yandex_vpc_gateway" "nat_gateway" {
   name = "fortress-gateway"
   shared_egress_gateway {}
 }
 
-#Создаем сетевой маршрут для выхода в интернет через NAT
+#Создание сетевого маршрута для выхода в интернет через NAT
 resource "yandex_vpc_route_table" "rt" {
   name       = "fortress-route-table"
   network_id = yandex_vpc_network.fortress.id
@@ -38,7 +38,8 @@ resource "yandex_vpc_route_table" "rt" {
   }
 }
 
-#Создаем группы безопасности (firewall)
+#Создание групп безопасности (firewall)
+#Группа безопасности для bastion-host
 resource "yandex_vpc_security_group" "bastion_sg" {
   name        = "bastion-sg"
   description = "Группа безопасности для bastion-хоста"
@@ -60,6 +61,7 @@ resource "yandex_vpc_security_group" "bastion_sg" {
   }
 }
 
+#Создание группы безопасности внутреннего взаимодействия
 resource "yandex_vpc_security_group" "LAN" {
   name        = "LAN-sg"
   description = "Группа безопасности для всех локальных ВМ"
@@ -82,6 +84,7 @@ resource "yandex_vpc_security_group" "LAN" {
   }
 }
 
+#Создание группы безопасности для веб-сайтов
 resource "yandex_vpc_security_group" "web_sg" {
   name        = "web-sg"
   description = "Группа безопасности для web-сайтов"
@@ -137,6 +140,7 @@ resource "yandex_vpc_security_group" "web_sg" {
   }
 }
 
+#Создание группы безопасности для системы мониторинга
 resource "yandex_vpc_security_group" "zabbix_sg" {
   name        = "zabbix-sg"
   description = "Группа безопасности для zabbix-сервера"
@@ -181,6 +185,7 @@ resource "yandex_vpc_security_group" "zabbix_sg" {
   }
 }
 
+#Создание группы безопасности для БД
 resource "yandex_vpc_security_group" "db_server_sg" {
   name        = "db-server-sg"
   description = "Группа безопасности для базы данных"
@@ -220,7 +225,7 @@ resource "yandex_vpc_security_group" "db_server_sg" {
     description    = "Limited outgoing for updates"
     protocol       = "TCP"
     v4_cidr_blocks = ["0.0.0.0/0"]
-    port           = 443 # HTTPS для apt/yum репозиториев
+    port           = 443
   }
 
   egress {
