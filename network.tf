@@ -76,11 +76,32 @@ resource "yandex_vpc_security_group" "LAN" {
   }
 
   egress {
-    description    = "Permit ANY"
-    protocol       = "ANY"
+    description    = "Limited outgoing for updates"
+    protocol       = "TCP"
     v4_cidr_blocks = ["0.0.0.0/0"]
-    from_port      = 0
-    to_port        = 65535
+    port           = 443
+  }
+
+  egress {
+    description    = "DNS for updates"
+    protocol       = "UDP"
+    v4_cidr_blocks = ["0.0.0.0/0"]
+    port           = 53
+  }
+
+  # NTP для синхронизации времени
+  egress {
+    description    = "NTP time synchronization"
+    protocol       = "UDP"
+    v4_cidr_blocks = ["0.0.0.0/0"]
+    port           = 123
+  }
+
+  # ICMP для диагностики сети
+  egress {
+    description    = "Allow ICMP (ping, traceroute)"
+    protocol       = "ICMP"
+    v4_cidr_blocks = ["0.0.0.0/0"]
   }
 }
 
@@ -124,20 +145,6 @@ resource "yandex_vpc_security_group" "web_sg" {
     v4_cidr_blocks = ["10.0.1.10/32"] # IP Zabbix-сервера
     port           = 10051
   }
-
-  egress {
-    description    = "Limited outgoing for updates"
-    protocol       = "TCP"
-    v4_cidr_blocks = ["0.0.0.0/0"]
-    port           = 443  # Только HTTPS для обновлений
-  }
-
-  egress {
-    description    = "DNS for updates"
-    protocol       = "UDP"
-    v4_cidr_blocks = ["0.0.0.0/0"]
-    port           = 53
-  }
 }
 
 #Создание группы безопасности для системы мониторинга
@@ -168,20 +175,6 @@ resource "yandex_vpc_security_group" "zabbix_sg" {
       "10.0.2.0/24"
     ]
     port = 10051
-  }
-
-  egress {
-    description    = "Outgoing for updates and notifications"
-    protocol       = "TCP"
-    v4_cidr_blocks = ["0.0.0.0/0"]
-    port           = 443
-  }
-
-  egress {
-    description    = "DNS"
-    protocol       = "UDP"
-    v4_cidr_blocks = ["0.0.0.0/0"]
-    port           = 53
   }
 }
 
@@ -218,20 +211,5 @@ resource "yandex_vpc_security_group" "db_server_sg" {
     protocol       = "TCP"
     v4_cidr_blocks = ["10.0.1.10/32"] # IP Zabbix-сервера
     port           = 10051
-  }
-
-  #Ограничение доступа в интернет (кроме репозиториев)
-  egress {
-    description    = "Limited outgoing for updates"
-    protocol       = "TCP"
-    v4_cidr_blocks = ["0.0.0.0/0"]
-    port           = 443
-  }
-
-  egress {
-    description    = "DNS for updates"
-    protocol       = "UDP"
-    v4_cidr_blocks = ["0.0.0.0/0"]
-    port           = 53
   }
 }
