@@ -103,6 +103,13 @@ resource "yandex_vpc_security_group" "LAN" {
     protocol       = "ICMP"
     v4_cidr_blocks = ["0.0.0.0/0"]
   }
+
+  egress {
+    description    = "Allow Zabbix агенту подключаться к Zabbix серверу"
+    protocol       = "TCP"
+    v4_cidr_blocks = ["10.0.0.0/8"] 
+    port           = 10050
+  }
 }
 
 #Создание группы безопасности для веб-сайтов
