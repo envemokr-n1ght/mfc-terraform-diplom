@@ -83,6 +83,13 @@ resource "yandex_vpc_security_group" "LAN" {
   }
 
   egress {
+    description    = "Limited outgoing for updates"
+    protocol       = "TCP"
+    v4_cidr_blocks = ["0.0.0.0/0"]
+    port           = 80
+  }
+
+  egress {
     description    = "DNS for updates"
     protocol       = "UDP"
     v4_cidr_blocks = ["0.0.0.0/0"]
