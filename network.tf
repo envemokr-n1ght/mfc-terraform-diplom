@@ -212,4 +212,11 @@ resource "yandex_vpc_security_group" "db_server_sg" {
     v4_cidr_blocks = ["10.0.1.10/32"] # IP Zabbix-сервера
     port           = 10051
   }
+
+  egress {
+    description    = "Allow replication traffic to master"
+    protocol       = "TCP"
+    v4_cidr_blocks = ["10.0.1.15/32"] # IP master-db
+    port           = 5432
+  }
 }
