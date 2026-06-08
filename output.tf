@@ -1,3 +1,4 @@
+# Вывод внутренних и внешних IP
 output "all_vm_ips" {
   value = merge(
     # Zabbix-сервер
@@ -28,12 +29,14 @@ output "all_vm_ips" {
   description = "Публичные и внутренние IP-адреса всех ВМ"
 }
 
+# Вывод публичного IP-адреса балансировщика
 output "nlb_public_balancer" {
   value       = one(one(yandex_lb_network_load_balancer.web-nlb.listener).external_address_spec).address
   description = "Публичный IP-адрес Network Loader Balancer"  
 }
 
+# Команда для подключения к ВМ
 output "ssh_connection_command" {
-  value       = "ssh -J ubuntu@${yandex_compute_instance.others["bastion"].network_interface[0].nat_ip_address} ubuntu@<private_ip>"
+  value       = "ssh -J ubuntu@${yandex_compute_instance.others["bastion"].network_interface[0].nat_ip_address} ubuntu@${yandex_compute_instance.zabbix["zabbix"].network_interface[0].nat_ip_address}"
   description = "Команда для подключения к ВМ с помощью bastion"
 }
