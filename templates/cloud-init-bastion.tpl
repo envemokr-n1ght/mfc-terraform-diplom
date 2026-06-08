@@ -48,11 +48,5 @@ runcmd:
   - systemctl restart zabbix-agent2
   - systemctl enable zabbix-agent2
 
-final_message: |
-  =========================================
-  BASTION HOST IS READY
-  =========================================
-  Hostname: ${vm_name}
-  Zabbix Server: ${zabbix_server_ip}
-  Agent status: active
-  =========================================
+final_message: "BASTION HOST IS READY"
+
