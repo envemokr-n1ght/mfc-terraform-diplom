@@ -1,29 +1,26 @@
 #cloud-config
+
 package_update: true
 package_upgrade: false
+
 packages: []
 
 runcmd:
+  # ----- 1. Настройка имени хоста и времени -----
   - hostnamectl set-hostname ${vm_name}
   - timedatectl set-timezone Asia/Yekaterinburg
-  
-  # ============================================
-  # ДОБАВЛЕНИЕ РЕПОЗИТОРИЯ POSTGRESQL
-  # ============================================
+
+  # ----- 2. Дабавление репозитория PostgreSQL -----
   - apt-get update
   - apt-get install -y wget curl ca-certificates netcat-openbsd
   - wget -q --no-check-certificate https://www.postgresql.org/media/keys/ACCC4CF8.asc -O- | sudo apt-key add -
   - echo "deb https://apt.postgresql.org/pub/repos/apt $(lsb_release -cs)-pgdg main" > /etc/apt/sources.list.d/pgdg.list
   - apt-get update
-  
-  # ============================================
-  # УСТАНОВКА ПАКЕТОВ
-  # ============================================
+
+  # ----- 3. Установка пакетов PostgreSQL 17 -----
   - apt-get install -y postgresql-17 postgresql-client-17
-  
-  # ============================================
-  # ZABBIX AGENT 2
-  # ============================================
+
+  # ----- 4. Установка ZABBIX AGENT 2 -----
   - wget -q https://repo.zabbix.com/zabbix/7.0/ubuntu/pool/main/z/zabbix-release/zabbix-release_latest_7.0+ubuntu24.04_all.deb
   - dpkg -i zabbix-release_latest_7.0+ubuntu24.04_all.deb
   - apt-get update
@@ -34,18 +31,14 @@ runcmd:
   - systemctl restart zabbix-agent2
   - systemctl enable zabbix-agent2
   
-  # ============================================
-  # POSTGRESQL REPLICA
-  # ============================================
-  
-  # Остановка и очистка
+  # ----- 5. Остановка и очистка -----
   - systemctl stop postgresql || true
   - rm -rf /var/lib/postgresql/17/main
   - mkdir -p /var/lib/postgresql/17/main
   - chown postgres:postgres /var/lib/postgresql/17/main
   - chmod 700 /var/lib/postgresql/17/main
 
-  # Ожидание мастера
+  # ----- 6. Ожидание мастера -----
   - |
     echo "Waiting for master PostgreSQL on ${master_db_ip}:5432..."
     for i in $(seq 1 60); do
@@ -57,26 +50,26 @@ runcmd:
       sleep 10
     done
 
-  # Копирование данных с мастером (через .pgpass)
+  # ----- 7. Копирование данных с мастером (через .pgpass) -----
   - echo "${master_db_ip}:5432:*:repl_user:repl_pass_123" > /tmp/.pgpass
   - chmod 600 /tmp/.pgpass
   - sudo -u postgres pg_basebackup -h ${master_db_ip} -p 5432 -U repl_user -D /var/lib/postgresql/17/main -Fp -Xs -P -R --no-password
   - rm -f /tmp/.pgpass
 
-  # Настройка primary_conninfo с application_name
+  # ----- 8. Настройка primary_conninfo с application_name -----
   - |
     echo "primary_conninfo = 'host=${master_db_ip} port=5432 user=repl_user password=${replication_password} application_name=db_secondary'" > /var/lib/postgresql/17/main/postgresql.auto.conf
-  
-  # Включение режима реплики
+
+  # ----- 9. Включение режима реплики -----
   - touch /var/lib/postgresql/17/main/standby.signal
   - chown -R postgres:postgres /var/lib/postgresql/17/main
   - chmod 700 /var/lib/postgresql/17/main
 
-  # Настройка postgresql.conf
+  # ----- 10. Настройка postgresql.conf -----
   - sed -i "s/^#listen_addresses =.*/listen_addresses = 'localhost'/" /etc/postgresql/17/main/postgresql.conf
   - sed -i "s/^#hot_standby =.*/hot_standby = on/" /etc/postgresql/17/main/postgresql.conf
 
-  # Запуск PostgreSQL
+  # ----- 11. Запуск PostgreSQL -----
   - systemctl start postgresql
   - systemctl enable postgresql
 
