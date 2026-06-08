@@ -1,3 +1,4 @@
+# Создание целевой группы балансировщика
 resource "yandex_lb_target_group" "web-tg" {
     name = "target-group"
     
@@ -12,6 +13,7 @@ resource "yandex_lb_target_group" "web-tg" {
     }
 }
 
+# Создание балансировщика
 resource "yandex_lb_network_load_balancer" "web-nlb" {
     name = "network-load-balancer"
 
@@ -23,6 +25,7 @@ resource "yandex_lb_network_load_balancer" "web-nlb" {
       }
     }
 
+    # Проверка жизни целевой группы
     attached_target_group {
       target_group_id = yandex_lb_target_group.web-tg.id
 
