@@ -1,6 +1,8 @@
 #cloud-config
+
 package_update: true
 package_upgrade: false
+
 packages: []
 
 write_files:
@@ -46,33 +48,34 @@ write_files:
       }
 
 runcmd:
+  # ----- 1. Настройка имени хоста и времени -----
   - hostnamectl set-hostname ${vm_name}
   - timedatectl set-timezone Asia/Yekaterinburg
   
-  # Ожидание освобождения dpkg
+  # ----- 2. Ожидание освобождения dpkg -----
   - |
     while fuser /var/lib/dpkg/lock-frontend >/dev/null 2>&1; do
       echo "Waiting for dpkg lock to be released..."
       sleep 5
     done
   
-  # Добавление репозитория PostgreSQL
+  # ----- 3. Добавление репозитория PostgreSQL -----
   - apt-get install -y curl ca-certificates
   - install -d /usr/share/postgresql-common/pgdg
   - curl -o /usr/share/postgresql-common/pgdg/apt.postgresql.org.asc --fail https://www.postgresql.org/media/keys/ACCC4CF8.asc
   - sh -c 'echo "deb [signed-by=/usr/share/postgresql-common/pgdg/apt.postgresql.org.asc] https://apt.postgresql.org/pub/repos/apt $(lsb_release -cs)-pgdg main" > /etc/apt/sources.list.d/pgdg.list'
   - apt-get update
 
-  # Установка Nginx и PHP с PostgreSQL поддержкой
+  # ----- 4. Установка Nginx и PHP с PostgreSQL поддержкой -----
   - apt-get install -y nginx php8.3-fpm php8.3-pgsql php8.3-pdo postgresql-client-17
 
-  # Настройка Nginx для PHP
+  # ----- 5. Настройка Nginx для PHP -----
   - rm -f /etc/nginx/sites-enabled/default
   - ln -s /etc/nginx/sites-available/web-site /etc/nginx/sites-enabled/
   - systemctl enable nginx php8.3-fpm
   - systemctl restart nginx php8.3-fpm
   
-  # Zabbix Agent 2
+  # ----- 6. Установка Zabbix Agent 2 -----
   - wget -q https://repo.zabbix.com/zabbix/7.0/ubuntu/pool/main/z/zabbix-release/zabbix-release_latest_7.0+ubuntu24.04_all.deb
   - dpkg -i zabbix-release_latest_7.0+ubuntu24.04_all.deb
   - apt-get update
