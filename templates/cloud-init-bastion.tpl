@@ -36,10 +36,10 @@ runcmd:
   - sed -i "s/^ServerActive=127.0.0.1/ServerActive=${zabbix_server_ip}/" /etc/zabbix/zabbix_agent2.conf
   - sed -i "s/^Hostname=Zabbix server/Hostname=${vm_name}/" /etc/zabbix/zabbix_agent2.conf
 
-  # ----- 5. Удаляем конфликтующий Include (если есть) -----
+  # ----- 5. Удаление конфликтующий Include (если есть) -----
   - sed -i '/plugins.d/d' /etc/zabbix/zabbix_agent2.conf
 
-  # ----- 6. Добавляем пользовательские параметры для мониторинга SSH и сети -----
+  # ----- 6. Добавление пользовательских параметров для мониторинга SSH и сети -----
   - echo "UserParameter=ssh.sessions,who | wc -l" >> /etc/zabbix/zabbix_agent2.d/bastion.conf
   - echo "UserParameter=net.connections,ss -tun | wc -l" >> /etc/zabbix/zabbix_agent2.d/bastion.conf
 
