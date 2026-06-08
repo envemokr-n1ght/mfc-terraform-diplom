@@ -7,21 +7,21 @@ zabbix_db_password   = "ваш_пароль"
 replication_password = "ваш_пароль"
 monitor_password     = "ваш_пароль"
 
+# Значения параметров ВМ
 vms = {
   bastion = {
-    name               = "bastion-host"
-    cores              = 2
-    memory             = 2
-    disk_size          = 10
-    image_family       = "ubuntu-2404-lts"
-    subnet_id          = "fortress_a"
-    assign_public_ip   = true
-    nat_ip_address     = ""
-    user_data_script   = "./templates/cloud-init-bastion.tpl"
-    availability_zone  = "ru-central1-a"
-    private_ip         = "10.0.1.5"
-    security_group_ids = ["LAN", "bastion_sg"]
-    serial_port_enable = 1
+    name               = "bastion-host"                         # Имя
+    cores              = 2                                      # Ядра процессора
+    memory             = 2                                      # Оперативная память
+    disk_size          = 10                                     # Размер диска
+    image_family       = "ubuntu-2404-lts"                      # ОС
+    subnet_id          = "fortress_a"                           # подсеть
+    assign_public_ip   = true                                   # Наличие публичного IP-адреса
+    nat_ip_address     = ""                                     # Статический адрес (если есть)
+    user_data_script   = "./templates/cloud-init-bastion.tpl"   # Путь к cloud-init файлу
+    availability_zone  = "ru-central1-a"                        # Зона доступности
+    private_ip         = "10.0.1.5"                             # Внутренний IP-адрес
+    security_group_ids = ["LAN", "bastion_sg"]                  # Группы безопасности
   }
 
   zabbix = {
