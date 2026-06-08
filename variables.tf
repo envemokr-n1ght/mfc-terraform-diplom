@@ -1,15 +1,18 @@
+# ID облака
 variable "cloud_id" {
   description = "Yandex Cloud ID"
   type        = string
   sensitive   = true
 }
 
+# ID каталога
 variable "folder_id" {
   description = "Yandex Cloud Folder ID"
   type        = string
   sensitive   = true
 }
 
+# Параметры для ВМ
 variable "vms" {
   description = "план конфигурации виртуальных машин"
   type = map(object({
@@ -29,9 +32,7 @@ variable "vms" {
   }))
 }
 
-# ============================================
 # Пароли для Zabbix и PostgreSQL (sensitive)
-# ============================================
 variable "zabbix_db_password" {
   type        = string
   sensitive   = true
