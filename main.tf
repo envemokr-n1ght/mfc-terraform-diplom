@@ -46,9 +46,7 @@ locals {
   }
 }
 
-# ============================================
-# 1. СОЗДАЁМ ZABBIX-СЕРВЕР (ПЕРВЫМ)
-# ============================================
+# 1. Создание ZABBIX-сервера (первым)
 resource "yandex_compute_instance" "zabbix" {
   for_each = {
     for k, v in var.vms : k => v
@@ -93,9 +91,7 @@ resource "yandex_compute_instance" "zabbix" {
   }
 }
 
-# ============================================
-# 2. DB-PRIMARY (ВТОРОЙ, ПОСЛЕ ZABBIX)
-# ============================================
+# 2. Создание DB-PRIMARY (второй)
 resource "yandex_compute_instance" "db_primary" {
   for_each = {
     for k, v in var.vms : k => v
@@ -142,14 +138,13 @@ resource "yandex_compute_instance" "db_primary" {
   }
 }
 
+# Задержка перед созданием реплики
 resource "time_sleep" "wait_for_master" {
   create_duration = "60s"
   depends_on      = [yandex_compute_instance.db_primary]
 }
 
-# ============================================
-# 3. DB-SECONDARY (ТРЕТИЙ, ПОСЛЕ DB-PRIMARY)
-# ============================================
+# 3. Создание DB-SECONDARY (третий)
 resource "yandex_compute_instance" "db_secondary" {
   for_each = {
     for k, v in var.vms : k => v
@@ -196,9 +191,7 @@ resource "yandex_compute_instance" "db_secondary" {
   }
 }
 
-# ============================================
-# 4. ОСТАЛЬНЫЕ ВМ (БАСТИОН, WEB-1, WEB-2)
-# ============================================
+# 4. Создание остальных ВМ (Bastion, web-1, web-2)
 resource "yandex_compute_instance" "others" {
   for_each = {
     for k, v in var.vms : k => v
