@@ -41,7 +41,7 @@ runcmd:
   - rm -f /etc/nginx/sites-enabled/default
 
   # ----- 7. Создание символической ссылки для конфига Zabbix -----
-- ln -sf /etc/zabbix/nginx.conf /etc/nginx/conf.d/zabbix.conf
+  - ln -sf /etc/zabbix/nginx.conf /etc/nginx/conf.d/zabbix.conf
 
   # ----- 8. Создание символической ссылки для правильного пути сокета -----
   - ln -sf /var/run/php/php8.3-fpm.sock /var/run/php/zabbix.sock
