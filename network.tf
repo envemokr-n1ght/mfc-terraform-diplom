@@ -103,19 +103,19 @@ resource "yandex_vpc_security_group" "LAN" {
     v4_cidr_blocks = ["0.0.0.0/0"]
     port           = 123
   }
+  
+  egress {
+    description    = "Allow Zabbix агенту подключаться к Zabbix серверу"
+    protocol       = "TCP"
+    v4_cidr_blocks = ["10.0.1.10/32"] # IP Zabbix-сервера
+    port           = 10051
+  }
 
   # ICMP для диагностики сети
   egress {
     description    = "Allow ICMP (ping, traceroute)"
     protocol       = "ICMP"
     v4_cidr_blocks = ["0.0.0.0/0"]
-  }
-
-  egress {
-    description    = "Allow Zabbix агенту подключаться к Zabbix серверу"
-    protocol       = "TCP"
-    v4_cidr_blocks = ["10.0.0.0/8"] 
-    port           = 10050
   }
 }
 
@@ -151,13 +151,6 @@ resource "yandex_vpc_security_group" "web_sg" {
     protocol       = "TCP"
     v4_cidr_blocks = ["10.0.1.15/32"]  # IP-адрес db-primary
     port           = 5432
-  }
-
-  egress {
-    description    = "Allow Zabbix агенту подключаться к Zabbix серверу"
-    protocol       = "TCP"
-    v4_cidr_blocks = ["10.0.1.10/32"] # IP Zabbix-сервера
-    port           = 10051
   }
 }
 
@@ -218,13 +211,6 @@ resource "yandex_vpc_security_group" "db_server_sg" {
     protocol       = "TCP"
     v4_cidr_blocks = ["10.0.1.5/32"]
     port           = 22
-  } 
-
-  egress {
-    description    = "Allow Zabbix agent to connent to Zabbix server"
-    protocol       = "TCP"
-    v4_cidr_blocks = ["10.0.1.10/32"] # IP Zabbix-сервера
-    port           = 10051
   }
 
   egress {
