@@ -34,7 +34,7 @@ runcmd:
   # ----- 4. Настройка zabbix_agent2.conf -----
   - sed -i "s/^Server=127.0.0.1/Server=${zabbix_server_ip}/" /etc/zabbix/zabbix_agent2.conf
   - sed -i "s/^ServerActive=127.0.0.1/ServerActive=${zabbix_server_ip}/" /etc/zabbix/zabbix_agent2.conf
-  - sed -i "s/^Hostname=Zabbix server/Hostname=${vm_name}/" /etc/zabbix/zabbix_agent2.conf
+  - sed -i "s/^Hostname=Zabbix server/Hostname=Bastion-host/" /etc/zabbix/zabbix_agent2.conf
 
   # ----- 5. Удаление конфликтующий Include (если есть) -----
   - sed -i '/plugins.d/d' /etc/zabbix/zabbix_agent2.conf
