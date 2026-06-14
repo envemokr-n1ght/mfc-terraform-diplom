@@ -82,7 +82,7 @@ runcmd:
   - apt-get install -y zabbix-agent2
   - sed -i "s/^Server=127.0.0.1/Server=${zabbix_server_ip}/" /etc/zabbix/zabbix_agent2.conf
   - sed -i "s/^ServerActive=127.0.0.1/ServerActive=${zabbix_server_ip}/" /etc/zabbix/zabbix_agent2.conf
-  - sed -i "s/^Hostname=Zabbix server/Hostname=web-2/" /etc/zabbix/zabbix_agent2.conf
+  - sed -i "s/^Hostname=Zabbix server/Hostname=Web-2/" /etc/zabbix/zabbix_agent2.conf
   - systemctl restart zabbix-agent2
   - systemctl enable zabbix-agent2
 
